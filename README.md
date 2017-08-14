@@ -1,5 +1,7 @@
 # grenache-nodejs-link
 
+<img src="logo.png" width="15%" />
+
 In Grenache, `grenache-nodejs-link` communicates with the DHT.
 
 ### Class: Link
