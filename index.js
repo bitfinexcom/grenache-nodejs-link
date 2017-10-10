@@ -189,11 +189,7 @@ class Link extends Events {
   }
 
   stop () {
-    _.each(['monitor'], k => {
-      const vp = `_${k}`
-      clearInterval(this[vp])
-      delete this[vp]
-    })
+    clearInterval(this._monitorItv)
 
     _.each(this.cache, c => {
       c.clear()
