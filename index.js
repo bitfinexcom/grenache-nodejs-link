@@ -6,6 +6,8 @@ const Events = require('events')
 const LRU = require('lru')
 const request = require('request')
 const CbQ = require('cbq')
+const ed = require('ed25519-supercop')
+const bencode = require('bencode')
 
 class Link extends Events {
   constructor (conf) {
@@ -153,6 +155,27 @@ class Link extends Events {
 
   put (opts, cb) {
     this.request('put', opts, {}, cb)
+  }
+
+  putMutable (data, opts, cb) {
+    if (!data.seq) return cb(new Error('ERR_MISSING_SEQ'))
+
+    const { publicKey, secretKey } = opts.keys
+    if (!publicKey || !secretKey) return cb(new Error('ERR_MISSING_KEY'))
+
+    data.k = publicKey.toString('hex')
+
+    const toEncode = { seq: data.seq, v: data.v }
+    const encoded = bencode
+      .encode(toEncode)
+      .slice(1, -1)
+      .toString()
+
+    data.sig = ed
+      .sign(encoded, publicKey, secretKey)
+      .toString('hex')
+
+    this.put(data, cb)
   }
 
   get (hash, cb) {

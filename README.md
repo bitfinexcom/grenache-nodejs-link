@@ -29,19 +29,36 @@ successful disconnection.
 
 #### link.announce(name)
 
-  - name &lt;String&gt; Name of the service, used to find the service
+  - `name` &lt;String&gt; Name of the service, used to find the service
     from other peers
 
 Used to announce a service, e.g. a [RPC Server](#class-peerrpcserver).
 
-#### link.put(options)
+#### link.put(data, callback)
 
-  - `options`
+  - `data`
     - `v`: &lt;String&gt; value to store
   - `callback` &lt;function&gt;
 
 Puts a value into the DHT.
 [Example](https://github.com/bitfinexcom/grenache-nodejs-ws/tree/master/examples/put_get.js).
+
+#### link.putMutable(data, opts, callback)
+
+  - `data`
+    - `v`: &lt;String&gt; value to store
+    - `s`: &lt;Number&gt; sequence number
+  - `opts`
+    - `keys`: &lt;Object&gt; contains `ed25519-supercop` private and public key
+      - `publicKey`: &lt;Buffer&gt; public key
+      - `secretKey`: &lt;Buffer&gt; private key
+  - `callback` &lt;function&gt;
+
+Provides sugar for storing mutable, signed data in the DHT.
+
+[Example raw put](https://github.com/bitfinexcom/grenache-nodejs-ws/tree/master/examples/put_get_mutable_raw.js)
+<br/>
+[Example with putMutable](https://github.com/bitfinexcom/grenache-nodejs-ws/tree/master/examples/put_get_mutable.js)
 
 #### link.get(hash, callback)
 
