@@ -32,7 +32,8 @@ class Link extends Events {
   post (url, data, opts, cb) {
     request.post(_.extend({
       url: url,
-      json: data
+      json: true,
+      body: data
     }, opts), cb)
   }
 
