@@ -74,4 +74,33 @@ describe('put-get integration', () => {
       })
     })
   }).timeout(7000)
+
+  it('mutable data supports salt', (done) => {
+    const link = new Link({
+      grape: 'http://127.0.0.1:30001'
+    })
+    link.start()
+
+    const data = { v: 'hello world', seq: 1, salt: 'foobar' }
+    const opts = {
+      keys: ed.createKeyPair(ed.createSeed())
+    }
+
+    link.putMutable(data, opts, (err, hash) => {
+      if (err) throw err
+
+      link.get(hash, (err, res) => {
+        if (err) throw err
+
+        assert.equal(res.v, 'hello world')
+        assert.equal(typeof res.k, 'string')
+        assert.equal(typeof res.sig, 'string')
+        assert.equal(res.salt, 'foobar')
+        assert.ok(res.sig)
+
+        link.stop()
+        done()
+      })
+    })
+  }).timeout(7000)
 })

@@ -6,6 +6,7 @@ const Link = require('../')
 const data = {
   seq: 1,
   v: 'Hello World!'
+  // salt: "foobar"
 }
 
 const opts = {

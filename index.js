@@ -166,6 +166,9 @@ class Link extends Events {
     data.k = publicKey.toString('hex')
 
     const toEncode = { seq: data.seq, v: data.v }
+
+    if (data.salt) toEncode.salt = data.salt
+
     const encoded = bencode
       .encode(toEncode)
       .slice(1, -1)
