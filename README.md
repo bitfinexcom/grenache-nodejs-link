@@ -4,6 +4,20 @@
 
 In Grenache, `grenache-nodejs-link` communicates with the DHT.
 
+### Requirements
+
+Install `Grenache Grape`: https://github.com/bitfinexcom/grenache-grape:
+
+```bash
+npm i -g grenache-grape
+```
+
+```
+// Start 2 Grapes
+grape --dp 20001 --aph 30001 --bn '127.0.0.1:20002'
+grape --dp 20002 --aph 40001 --bn '127.0.0.1:20001'
+```
+
 ### Class: Link
 
 #### new Link(options)
@@ -29,19 +43,36 @@ successful disconnection.
 
 #### link.announce(name)
 
-  - name &lt;String&gt; Name of the service, used to find the service
+  - `name` &lt;String&gt; Name of the service, used to find the service
     from other peers
 
 Used to announce a service, e.g. a [RPC Server](#class-peerrpcserver).
 
-#### link.put(options)
+#### link.put(data, callback)
 
-  - `options`
+  - `data`
     - `v`: &lt;String&gt; value to store
   - `callback` &lt;function&gt;
 
 Puts a value into the DHT.
 [Example](https://github.com/bitfinexcom/grenache-nodejs-ws/tree/master/examples/put_get.js).
+
+#### link.putMutable(data, opts, callback)
+
+  - `data`
+    - `v`: &lt;String&gt; value to store
+    - `s`: &lt;Number&gt; sequence number
+  - `opts`
+    - `keys`: &lt;Object&gt; contains `ed25519-supercop` private and public key
+      - `publicKey`: &lt;Buffer&gt; public key
+      - `secretKey`: &lt;Buffer&gt; private key
+  - `callback` &lt;function&gt;
+
+Provides sugar for storing mutable, signed data in the DHT.
+
+[Example raw put](https://github.com/bitfinexcom/grenache-nodejs-ws/tree/master/examples/put_get_mutable_raw.js)
+<br/>
+[Example with putMutable](https://github.com/bitfinexcom/grenache-nodejs-ws/tree/master/examples/put_get_mutable.js)
 
 #### link.get(hash, callback)
 
