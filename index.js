@@ -193,6 +193,8 @@ class Link extends Events {
         this.handleReply(req.rid, new Error('ERR_TIMEOUT'), null, true)
       }
     })
+
+    return this
   }
 
   start () {
@@ -212,6 +214,8 @@ class Link extends Events {
 
       this.cache[fld] = new LRU(opts)
     })
+
+    return this
   }
 
   stop () {
@@ -220,6 +224,8 @@ class Link extends Events {
     _.each(this.cache, c => {
       c.clear()
     })
+
+    return this
   }
 }
 
