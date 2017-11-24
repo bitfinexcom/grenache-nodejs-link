@@ -36,7 +36,15 @@ class Link extends Events {
       url: url,
       json: true,
       body: data
-    }, opts), cb)
+    }, opts), (err, res, data) => {
+      if (!/^2..$/.test(res.statusCode)) {
+        const err = new Error(data)
+        err.code = res.statusCode
+        return cb(err)
+      }
+
+      cb(err, res, data)
+    })
   }
 
   getRequestHash (type, payload) {
