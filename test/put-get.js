@@ -103,4 +103,25 @@ describe('put-get integration', () => {
       })
     })
   }).timeout(7000)
+
+  it('returns errors in case of errors', (done) => {
+    const link = new Link({
+      grape: 'http://127.0.0.1:30001'
+    })
+    link.start()
+
+    const data = { v: 'hello world', seq: 1, salt: 'foobar' }
+    const opts = {
+      keys: ed.createKeyPair(ed.createSeed())
+    }
+
+    link.putMutable(data, opts, (err, hash) => {
+      if (err) throw err
+      link.putMutable(data, opts, (err2, hash) => {
+        assert.equal(err2.code, 302)
+        link.stop()
+        done()
+      })
+    })
+  }).timeout(7000)
 })
