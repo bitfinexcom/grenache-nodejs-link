@@ -1,6 +1,7 @@
 'use strict'
 
 const _ = require('lodash')
+const async = require('async')
 const uuid = require('uuid')
 const Events = require('events')
 const LRU = require('lru')
@@ -51,7 +52,13 @@ class Link extends Events {
     return `${type}:${JSON.stringify(payload)}`
   }
 
-  request (type, payload, _opts, cb) {
+  request (type, payload, _opts = {}, cb) {
+    async.retry(_opts.retry || 1, next => {
+      this._request(type, payload, _opts, next)
+    }, cb)
+  }
+
+  _request (type, payload, _opts, cb) {
     const opts = _.defaults(_opts, {
       timeout: this.conf.requestTimeout
     })
@@ -76,7 +83,9 @@ class Link extends Events {
     })
 
     const kcnt = this.cbq0.cnt(req.qhash)
-    if (kcnt > 1) return
+    if (kcnt > 1) {
+      return
+    }
 
     this.post(
       `${this.conf.grape}/${type}`,
@@ -141,7 +150,7 @@ class Link extends Events {
     return this._reqs.get(rid)
   }
 
-  lookup (key, opts, cb) {
+  lookup (key, opts = {}, cb) {
     this.request('lookup', key, opts, (err, res) => {
       if (err) {
         cb(err)
