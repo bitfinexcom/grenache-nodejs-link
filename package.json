@@ -1,6 +1,6 @@
 {
   "name": "grenache-nodejs-link",
-  "version": "0.7.1",
+  "version": "0.7.2",
   "description": "Granache Node.js Link",
   "author": "prdn <paolo@bitfinex.com> (https://bitfinex.com/)",
   "keywords": [
@@ -16,7 +16,7 @@
     "ed25519-supercop": "^1.0.2",
     "lodash": "^4.17.4",
     "lru": "^3.1.0",
-    "request": "^2.81.0",
+    "request": "^2.83.0",
     "uuid": "^3.0.1"
   },
   "main": "index.js",
