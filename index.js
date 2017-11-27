@@ -38,7 +38,7 @@ class Link extends Events {
       json: true,
       body: data
     }, opts), (err, res, data) => {
-      if (!/^2..$/.test(res.statusCode)) {
+      if (res && !/^2..$/.test(res.statusCode)) {
         const err = new Error(data)
         err.code = res.statusCode
         return cb(err)
