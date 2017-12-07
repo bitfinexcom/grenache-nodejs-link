@@ -18,8 +18,8 @@ class Link extends Events {
       grape: '',
       monitorTimeout: 2000,
       requestTimeout: 2500,
-      lruMaxSizeLookup: 1000,
-      lruMaxAgeLookup: 5000
+      lruMaxSizeLookup: 2500,
+      lruMaxAgeLookup: 10000
     }
 
     _.extend(this.conf, conf)
