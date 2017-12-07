@@ -151,6 +151,10 @@ class Link extends Events {
   }
 
   lookup (key, opts = {}, cb) {
+    _.defaults(opts, {
+      retry: 3
+    })
+
     this.request('lookup', key, opts, (err, res) => {
       if (err) {
         cb(err)
@@ -166,7 +170,14 @@ class Link extends Events {
   }
 
   announce (key, port, opts = {}, cb) {
-    if (!cb) cb = () => {}
+    if (!cb) {
+      cb = () => {}
+    }
+
+    _.defaults(opts, {
+      retry: 3
+    })
+
     this.request('announce', [key, port], opts, cb)
   }
 
