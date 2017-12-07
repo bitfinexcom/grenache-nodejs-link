@@ -150,8 +150,8 @@ class Link extends Events {
     return this._reqs.get(rid)
   }
 
-  lookup (key, opts = {}, cb) {
-    _.defaults(opts, {
+  lookup (key, _opts = {}, cb) {
+    const opts = _.defaults({}, _opts, {
       retry: 3
     })
 
@@ -169,12 +169,12 @@ class Link extends Events {
     })
   }
 
-  announce (key, port, opts = {}, cb) {
+  announce (key, port, _opts = {}, cb) {
     if (!cb) {
       cb = () => {}
     }
 
-    _.defaults(opts, {
+    const opts = _.defaults({}, _opts, {
       retry: 3
     })
 
