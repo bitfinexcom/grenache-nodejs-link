@@ -170,6 +170,14 @@ class Link extends Events {
   }
 
   announce (key, port, _opts = {}, cb) {
+    this._announce('announce', key, port, _opts, cb)
+  }
+
+  unannounce (key, port, _opts = {}, cb) {
+    this._announce('unannounce', key, port, _opts, cb)
+  }
+
+  _announce (method, key, port, _opts, cb) {
     if (!cb) {
       cb = () => {}
     }
@@ -178,7 +186,7 @@ class Link extends Events {
       retry: 3
     })
 
-    this.request('announce', [key, port], opts, cb)
+    this.request(method, [key, port], opts, cb)
   }
 
   put (opts, cb) {
