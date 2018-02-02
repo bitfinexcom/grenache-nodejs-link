@@ -30,6 +30,7 @@ class Link extends Events {
     this.cache = {}
     this.cbq0 = new CbQ()
     this._reqs = new Map()
+    this._announces = new Map()
   }
 
   post (url, data, opts, cb) {
@@ -169,6 +170,35 @@ class Link extends Events {
     })
   }
 
+  startAnnouncing (key, port, opts = {}, cb) {
+    const id = port + ':' + key
+    if (this._announces.has(id)) return false
+
+    const info = {timeout: null, stopped: false}
+    const interval = (opts && opts.interval) || 2 * 60 * 1000
+    const ann = () => this.announce(key, port, opts, reann)
+    const reann = (err) => {
+      if (cb) cb(err)
+      cb = null
+      if (info.stopped) return
+      const ms = Math.ceil(0.5 * interval + Math.random() * interval)
+      info.timeout = setTimeout(ann, ms)
+    }
+
+    ann()
+    this._announces.set(id, info)
+  }
+
+  stopAnnouncing (key, port) {
+    const id = port + ':' + key
+    const info = this._announces.get(id)
+    if (!info) return false
+
+    this._announces.delete(id)
+    info.stopped = true
+    clearTimeout(info.timeout)
+  }
+
   announce (key, port, _opts = {}, cb) {
     if (!cb) {
       cb = () => {}
@@ -252,6 +282,13 @@ class Link extends Events {
     _.each(this.cache, c => {
       c.clear()
     })
+
+    for (let info of this._announces.values()) {
+      info.stopped = true
+      clearTimeout(info.timeout)
+    }
+
+    this._announces.clear()
 
     return this
   }
