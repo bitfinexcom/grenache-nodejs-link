@@ -171,6 +171,7 @@ class Link extends Events {
   }
 
   startAnnouncing (key, port, opts = {}, cb) {
+    if (typeof opts === 'function') return this.startAnnouncing(key, port, undefined, opts)
     const id = port + ':' + key
     if (this._announces.has(id)) return false
 
@@ -200,6 +201,8 @@ class Link extends Events {
   }
 
   announce (key, port, _opts = {}, cb) {
+    if (typeof _opts === 'function') return this.announce(key, port, undefined, _opts)
+
     if (!cb) {
       cb = () => {}
     }
