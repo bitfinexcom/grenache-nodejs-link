@@ -48,7 +48,7 @@ successful disconnection.
 
 Used to announce a service, e.g. a [RPC Server](#class-peerrpcserver).
 
-#### link.startAnnouncing(name, port, [otions])
+#### link.startAnnouncing(name, port, [opts])
 
 Keep announcing a service every ~2min (default) or specify interval in `opts.interval`
 
