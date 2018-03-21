@@ -90,3 +90,13 @@ Provides sugar for storing mutable, signed data in the DHT.
 Retrieves a stored value from the DHT via a `hash` &lt;String&gt;.
 Callback returns `err` &lt;Object&gt; and data &lt;Object&gt;.
 [Example](https://github.com/bitfinexcom/grenache-nodejs-ws/tree/master/examples/put_get.js).
+
+
+#### link.lookup(name, opts, callback)
+
+  - `name` &lt;String&gt; Name of the service to lookup
+  - `opts`
+    - `retry`: &lt;Number&gt; retry count
+  - `callback` &lt;function&gt;
+
+Retrieves the ports and IPs of a given service name.
