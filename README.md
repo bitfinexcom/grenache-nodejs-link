@@ -92,7 +92,7 @@ Callback returns `err` &lt;Object&gt; and data &lt;Object&gt;.
 [Example](https://github.com/bitfinexcom/grenache-nodejs-link/blob/master/examples/put_get.js).
 
 
-#### link.lookup(name, opts, callback)
+#### link.lookup(name, [opts], callback)
 
   - `name` &lt;String&gt; Name of the service to lookup
   - `opts`
