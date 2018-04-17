@@ -152,6 +152,8 @@ class Link extends Events {
   }
 
   lookup (key, _opts = {}, cb) {
+    if (typeof _opts === 'function') return this.lookup(key, {}, _opts)
+
     const opts = _.defaults({}, _opts, {
       retry: 3
     })
