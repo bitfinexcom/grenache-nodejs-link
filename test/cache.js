@@ -2,9 +2,9 @@
 
 'use strict'
 
-const assert = require('assert')
 const { bootTwoGrapes, killGrapes } = require('./helper')
 const Link = require('../')
+const assert = require('assert')
 
 let grapes
 describe('caching', () => {
@@ -24,16 +24,22 @@ describe('caching', () => {
     killGrapes(grapes, done)
   })
 
-  it('caches lookups and does not explode', (done) => {
+  it('caches lookups', (done) => {
     const link = new Link({
       grape: 'http://127.0.0.1:30001'
     })
     link.start()
     link.startAnnouncing('test', 10000, null, (err) => {
-      link.lookup('foo', (err, hash) => {
+      if (err) throw err
+      link.lookup('test', {}, (err, hash) => {
         if (err) throw err
-        link.lookup('foo', (err, hash) => {
+        link.lookup('test', {}, (err, hash) => {
           if (err) throw err
+          assert.deepEqual(
+            link.cache['lookup'].get('lookup:"test"'),
+            [ '127.0.0.1:10000' ]
+          )
+          link.stop()
           done()
         })
       })
