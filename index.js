@@ -217,10 +217,13 @@ class Link extends Events {
   }
 
   put (opts, cb) {
+    if (!opts || !cb) throw new Error('ERR_MISSING_ARGS')
+
     this.request('put', opts, {}, cb)
   }
 
   putMutable (data, opts, cb) {
+    if (!data || !opts || !cb) throw new Error('ERR_MISSING_ARGS')
     if (!data.seq) return cb(new Error('ERR_MISSING_SEQ'))
 
     const { publicKey, secretKey } = opts.keys
