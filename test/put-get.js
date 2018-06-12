@@ -89,7 +89,7 @@ describe('put-get integration', () => {
     link.putMutable(data, opts, (err, hash) => {
       if (err) throw err
 
-      link.get(hash, (err, res) => {
+      link.get({ hash: hash, salt: 'foobar' }, (err, res) => {
         if (err) throw err
 
         assert.equal(res.v, 'hello world')
