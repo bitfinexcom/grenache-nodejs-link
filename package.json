@@ -22,7 +22,7 @@
   "main": "index.js",
   "devDependencies": {
     "grenache-grape": "git+https://github.com/bitfinexcom/grenache-grape.git",
-    "mocha": "^4.0.1",
+    "mocha": "^5.2.0",
     "standard": "^10.0.2"
   },
   "scripts": {
