@@ -82,13 +82,20 @@ Provides sugar for storing mutable, signed data in the DHT.
 <br/>
 [Example with putMutable](https://github.com/bitfinexcom/grenache-nodejs-link/blob/master/examples/put_get_mutable.js)
 
-#### link.get(hash, callback)
+#### link.get(hash | object, callback)
 
   - `hash` &lt;String&gt; Hash used for lookup
+  - `object` &lt;Object&gt;
+    - `hash`: &lt;String&gt; Hash used for lookup
+    - `salt`: &lt;String&gt; (optional) salt that was used if data was stored with salt. Required in those cases.
+
   - `callback` &lt;function&gt;
 
 Retrieves a stored value from the DHT via a `hash` &lt;String&gt;.
+It also supports an object, which is used to pass a previously used salt in order to retrieve the data teh salt was used upon.
+
 Callback returns `err` &lt;Object&gt; and data &lt;Object&gt;.
+
 [Example](https://github.com/bitfinexcom/grenache-nodejs-link/blob/master/examples/put_get.js).
 
 
