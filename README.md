@@ -63,7 +63,7 @@ Stop announcing a service
   - `callback` &lt;function&gt;
 
 Puts a value into the DHT.
-[Example](https://github.com/bitfinexcom/grenache-nodejs-ws/tree/master/examples/put_get.js).
+[Example](https://github.com/bitfinexcom/grenache-nodejs-link/blob/master/examples/put_get.js).
 
 #### link.putMutable(data, opts, callback)
 
@@ -78,15 +78,32 @@ Puts a value into the DHT.
 
 Provides sugar for storing mutable, signed data in the DHT.
 
-[Example raw put](https://github.com/bitfinexcom/grenache-nodejs-ws/tree/master/examples/put_get_mutable_raw.js)
+[Example raw put](https://github.com/bitfinexcom/grenache-nodejs-link/blob/master/examples/put_get_mutable_raw.js)
 <br/>
-[Example with putMutable](https://github.com/bitfinexcom/grenache-nodejs-ws/tree/master/examples/put_get_mutable.js)
+[Example with putMutable](https://github.com/bitfinexcom/grenache-nodejs-link/blob/master/examples/put_get_mutable.js)
 
-#### link.get(hash, callback)
+#### link.get(hash | object, callback)
 
   - `hash` &lt;String&gt; Hash used for lookup
+  - `object` &lt;Object&gt;
+    - `hash`: &lt;String&gt; Hash used for lookup
+    - `salt`: &lt;String&gt; (optional) salt that was used if data was stored with salt. Required in those cases.
+
   - `callback` &lt;function&gt;
 
 Retrieves a stored value from the DHT via a `hash` &lt;String&gt;.
+It also supports an object, which is used to pass a previously used salt in order to retrieve the data teh salt was used upon.
+
 Callback returns `err` &lt;Object&gt; and data &lt;Object&gt;.
-[Example](https://github.com/bitfinexcom/grenache-nodejs-ws/tree/master/examples/put_get.js).
+
+[Example](https://github.com/bitfinexcom/grenache-nodejs-link/blob/master/examples/put_get.js).
+
+
+#### link.lookup(name, [opts], callback)
+
+  - `name` &lt;String&gt; Name of the service to lookup
+  - `opts`
+    - `retry`: &lt;Number&gt; retry count
+  - `callback` &lt;function&gt;
+
+Retrieves the ports and IPs of a given service name.
