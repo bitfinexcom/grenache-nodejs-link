@@ -39,7 +39,7 @@ describe('put-get integration', () => {
       link.get(hash, (err, res) => {
         if (err) throw err
 
-        assert.equal(res.v, 'hello world')
+        assert.strictEqual(res.v, 'hello world')
 
         link.stop()
         done()
@@ -64,9 +64,9 @@ describe('put-get integration', () => {
       link.get(hash, (err, res) => {
         if (err) throw err
 
-        assert.equal(res.v, 'hello world')
-        assert.equal(typeof res.k, 'string')
-        assert.equal(typeof res.sig, 'string')
+        assert.strictEqual(res.v, 'hello world')
+        assert.strictEqual(typeof res.k, 'string')
+        assert.strictEqual(typeof res.sig, 'string')
         assert.ok(res.sig)
 
         link.stop()
@@ -92,10 +92,10 @@ describe('put-get integration', () => {
       link.get({ hash: hash, salt: 'foobar' }, (err, res) => {
         if (err) throw err
 
-        assert.equal(res.v, 'hello world')
-        assert.equal(typeof res.k, 'string')
-        assert.equal(typeof res.sig, 'string')
-        assert.equal(res.salt, 'foobar')
+        assert.strictEqual(res.v, 'hello world')
+        assert.strictEqual(typeof res.k, 'string')
+        assert.strictEqual(typeof res.sig, 'string')
+        assert.strictEqual(res.salt, 'foobar')
         assert.ok(res.sig)
 
         link.stop()
@@ -118,7 +118,7 @@ describe('put-get integration', () => {
     link.putMutable(data, opts, (err, hash) => {
       if (err) throw err
       link.putMutable(data, opts, (err2, hash) => {
-        assert.equal(err2.code, 302)
+        assert.strictEqual(err2.code, 302)
         link.stop()
         done()
       })
