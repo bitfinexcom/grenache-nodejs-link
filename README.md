@@ -56,16 +56,17 @@ Keep announcing a service every ~2min (default) or specify interval in `opts.int
 
 Stop announcing a service
 
-#### link.put(data, callback)
+#### link.put(data, [callback]) => Promise
 
   - `data`
     - `v`: &lt;String&gt; value to store
   - `callback` &lt;function&gt;
 
-Puts a value into the DHT.
+Puts a value into the DHT. Callback is optional. You can also handle the returned Promise or use async/await.
+
 [Example](https://github.com/bitfinexcom/grenache-nodejs-link/blob/master/examples/put_get.js).
 
-#### link.putMutable(data, opts, callback)
+#### link.putMutable(data, opts, [callback]) => Promise
 
   - `data`
     - `v`: &lt;String&gt; value to store
@@ -76,13 +77,13 @@ Puts a value into the DHT.
       - `secretKey`: &lt;Buffer&gt; private key
   - `callback` &lt;function&gt;
 
-Provides sugar for storing mutable, signed data in the DHT.
+Provides sugar for storing mutable, signed data in the DHT. Callback is optional. You can also handle the returned Promise or use async/await.
 
 [Example raw put](https://github.com/bitfinexcom/grenache-nodejs-link/blob/master/examples/put_get_mutable_raw.js)
 <br/>
 [Example with putMutable](https://github.com/bitfinexcom/grenache-nodejs-link/blob/master/examples/put_get_mutable.js)
 
-#### link.get(hash | object, callback)
+#### link.get(hash | object, [callback]) => Promise
 
   - `hash` &lt;String&gt; Hash used for lookup
   - `object` &lt;Object&gt;
@@ -92,12 +93,25 @@ Provides sugar for storing mutable, signed data in the DHT.
   - `callback` &lt;function&gt;
 
 Retrieves a stored value from the DHT via a `hash` &lt;String&gt;.
-It also supports an object, which is used to pass a previously used salt in order to retrieve the data teh salt was used upon.
+It also supports an object, which is used to pass a previously used salt in order to retrieve the data the salt was used upon.
 
+Callback is optional. You can also handle the returned Promise or use async/await.
 Callback returns `err` &lt;Object&gt; and data &lt;Object&gt;.
 
-[Example](https://github.com/bitfinexcom/grenache-nodejs-link/blob/master/examples/put_get.js).
+**Async/Await Example:**
 
+```js
+(async () => {
+  try {
+    const res = await link.get('myhash')
+  } catch (e) {
+    console.log('ouch!', e)
+  }
+})
+```
+
+[Example](https://github.com/bitfinexcom/grenache-nodejs-link/blob/master/examples/put_get.js).
+[Example with async/await](examples/put_get_async_await.js).
 
 #### link.lookup(name, [opts], callback)
 
