@@ -35,7 +35,7 @@ describe('caching', () => {
         if (err) throw err
         link.lookup('test', {}, (err, hash) => {
           if (err) throw err
-          assert.deepEqual(
+          assert.deepStrictEqual(
             link.cache['lookup'].get('lookup:"test"'),
             [ '127.0.0.1:10000' ]
           )

@@ -37,7 +37,7 @@ describe('announce and lookups', () => {
       link.lookup('test', {}, (err, peers) => {
         if (err) throw err
 
-        assert.deepEqual(peers, ['127.0.0.1:10000'])
+        assert.deepStrictEqual(peers, ['127.0.0.1:10000'])
         link.stop()
         done()
       })

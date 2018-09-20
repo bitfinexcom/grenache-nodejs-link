@@ -177,7 +177,7 @@ class Link extends Events {
     const id = port + ':' + key
     if (this._announces.has(id)) return false
 
-    const info = {timeout: null, stopped: false}
+    const info = { timeout: null, stopped: false }
     const interval = (opts && opts.interval) || 2 * 60 * 1000
     const ann = () => this.announce(key, port, opts, reann)
     const reann = (err) => {
