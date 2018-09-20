@@ -217,17 +217,42 @@ class Link extends Events {
   }
 
   put (opts, cb) {
-    if (!opts || !cb) throw new Error('ERR_MISSING_ARGS')
+    return new Promise((resolve, reject) => {
+      if (!opts) throw new Error('ERR_MISSING_ARGS')
 
-    this.request('put', opts, {}, cb)
+      this.request('put', opts, {}, (err, data) => {
+        if (cb && err) return cb(err)
+        if (cb && data) return cb(null, data)
+
+        if (err) return reject(err)
+        if (data) resolve(data)
+      })
+    })
   }
 
   putMutable (data, opts, cb) {
-    if (!data || !opts || !cb) throw new Error('ERR_MISSING_ARGS')
-    if (!data.seq) return cb(new Error('ERR_MISSING_SEQ'))
+    return new Promise((resolve, reject) => {
+      if (!data || !opts) throw new Error('ERR_MISSING_ARGS')
 
+      if (!data.seq && cb) return cb(new Error('ERR_MISSING_SEQ'))
+      if (!data.seq) throw new Error('ERR_MISSING_SEQ')
+
+      const { publicKey, secretKey } = opts.keys
+      if ((!publicKey || !secretKey) && cb) return cb(new Error('ERR_MISSING_KEY'))
+      if (!publicKey || !secretKey) throw new Error('ERR_MISSING_KEY')
+
+      this._putMutable(data, opts, (err, data) => {
+        if (cb && err) return cb(err)
+        if (cb && data) return cb(null, data)
+
+        if (err) return reject(err)
+        if (data) resolve(data)
+      })
+    })
+  }
+
+  _putMutable (data, opts, cb) {
     const { publicKey, secretKey } = opts.keys
-    if (!publicKey || !secretKey) return cb(new Error('ERR_MISSING_KEY'))
 
     data.k = publicKey.toString('hex')
 
@@ -248,7 +273,15 @@ class Link extends Events {
   }
 
   get (hash, cb) {
-    this.request('get', hash, {}, cb)
+    return new Promise((resolve, reject) => {
+      this.request('get', hash, {}, (err, data) => {
+        if (cb && err) return cb(err)
+        if (cb && data) return cb(null, data)
+
+        if (err) throw err
+        if (data) resolve(data)
+      })
+    })
   }
 
   monitor () {
