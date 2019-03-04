@@ -2,26 +2,23 @@
 
 'use strict'
 
-const { bootTwoGrapes, killGrapes } = require('./helper')
 const Link = require('../')
 const assert = require('assert')
 
+const createGrapes = require('bfx-svc-test-helper/grapes')
+
 let grapes
-describe('lookup', () => {
+describe('announce and lookups', () => {
   before(function (done) {
     this.timeout(20000)
 
-    bootTwoGrapes((err, g) => {
-      if (err) throw err
-
-      grapes = g
-      done()
-    })
+    grapes = createGrapes()
+    grapes.start(done)
   })
 
   after(function (done) {
     this.timeout(5000)
-    killGrapes(grapes, done)
+    grapes.stop(done)
   })
 
   it('works with optional arguments', (done) => {
