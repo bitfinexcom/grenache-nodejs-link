@@ -3,17 +3,14 @@
 const _ = require('lodash')
 const async = require('async')
 const uuid = require('uuid')
-const Events = require('events')
 const LRU = require('lru')
 const request = require('request')
 const CbQ = require('cbq')
 const ed = require('ed25519-supercop')
 const bencode = require('bencode')
 
-class Link extends Events {
+class Link {
   constructor (conf) {
-    super()
-
     this.conf = {
       grape: '',
       monitorTimeout: 2000,
