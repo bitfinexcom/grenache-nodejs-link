@@ -33,13 +33,11 @@ grape --dp 20002 --aph 40001 --bn '127.0.0.1:20001'
 
 #### link.start()
 
-Sets up a connection to the DHT. Emits a `connect` event on
-successful connection.
+Sets up the link.
 
 #### link.stop()
 
-Stops the connection to the DHT. Emits a `disconnect` event on
-successful disconnection.
+Stops all current requests and announces.
 
 #### link.announce(name)
 
