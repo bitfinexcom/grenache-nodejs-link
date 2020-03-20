@@ -6,7 +6,6 @@ const uuid = require('uuid')
 const LRU = require('lru')
 const request = require('request')
 const CbQ = require('cbq')
-const ed = require('ed25519-supercop')
 const bencode = require('bencode')
 
 class Link {
