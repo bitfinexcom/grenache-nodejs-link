@@ -69,9 +69,9 @@ Puts a value into the DHT.
     - `v`: &lt;String&gt; value to store
     - `s`: &lt;Number&gt; sequence number
   - `opts`
-    - `keys`: &lt;Object&gt; contains `ed25519-supercop` private and public key
-      - `publicKey`: &lt;Buffer&gt; public key
-      - `secretKey`: &lt;Buffer&gt; private key
+    - `keys`: &lt;Object&gt; contains `ed25519` private and public key
+      - `pk`: &lt;Buffer&gt; public key
+      - `sk`: &lt;Buffer&gt; private key
   - `callback` &lt;function&gt;
 
 Provides sugar for storing mutable, signed data in the DHT.

@@ -7,6 +7,7 @@ const LRU = require('lru')
 const request = require('request')
 const CbQ = require('cbq')
 const bencode = require('bencode')
+const ed = require('bittorrent-dht-sodium')
 
 class Link {
   constructor (conf) {
@@ -222,10 +223,10 @@ class Link {
     if (!data || !opts || !cb) throw new Error('ERR_MISSING_ARGS')
     if (!data.seq) return cb(new Error('ERR_MISSING_SEQ'))
 
-    const { publicKey, secretKey } = opts.keys
-    if (!publicKey || !secretKey) return cb(new Error('ERR_MISSING_KEY'))
+    const { pk, sk } = opts.keys
+    if (!pk || !sk) return cb(new Error('ERR_MISSING_KEY'))
 
-    data.k = publicKey.toString('hex')
+    data.k = pk.toString('hex')
 
     const toEncode = { seq: data.seq, v: data.v }
 
@@ -237,7 +238,7 @@ class Link {
       .toString()
 
     data.sig = ed
-      .sign(encoded, publicKey, secretKey)
+      .sign(Buffer.from(encoded), sk)
       .toString('hex')
 
     this.put(data, cb)

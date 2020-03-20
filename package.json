@@ -12,6 +12,7 @@
   "dependencies": {
     "async": "^2.6.1",
     "bencode": "^2.0.0",
+    "bittorrent-dht-sodium": "^1.1.0",
     "cbq": "0.0.1",
     "lodash": "^4.17.11",
     "lru": "^3.1.0",

@@ -3,7 +3,7 @@
 'use strict'
 
 const assert = require('assert')
-const ed = require('ed25519-supercop')
+const ed = require('bittorrent-dht-sodium')
 
 const Link = require('../')
 
@@ -51,7 +51,7 @@ describe('announce and lookups', () => {
 
     const data = { v: 'hello world', seq: 1 }
     const opts = {
-      keys: ed.createKeyPair(ed.createSeed())
+      keys: ed.keygen()
     }
 
     link.putMutable(data, opts, (err, hash) => {
@@ -79,7 +79,7 @@ describe('announce and lookups', () => {
 
     const data = { v: 'hello world', seq: 1, salt: 'foobar' }
     const opts = {
-      keys: ed.createKeyPair(ed.createSeed())
+      keys: ed.keygen()
     }
 
     link.putMutable(data, opts, (err, hash) => {
@@ -108,7 +108,7 @@ describe('announce and lookups', () => {
 
     const data = { v: 'hello world', seq: 1, salt: 'foobar' }
     const opts = {
-      keys: ed.createKeyPair(ed.createSeed())
+      keys: ed.keygen()
     }
 
     link.putMutable(data, opts, (err, hash) => {
