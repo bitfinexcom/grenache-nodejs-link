@@ -7,6 +7,7 @@ const LRU = require('lru')
 const request = require('request')
 const CbQ = require('cbq')
 const bencode = require('bencode')
+const ed = require('ed25519-supercop')
 
 class Link {
   constructor (conf) {
