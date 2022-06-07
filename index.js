@@ -2,6 +2,7 @@
 
 const _ = require('lodash')
 const async = require('async')
+const ed = require('ed25519-supercop')
 const uuid = require('uuid')
 const LRU = require('lru')
 const request = require('request')
