@@ -10,13 +10,13 @@
     "micro-services"
   ],
   "dependencies": {
-    "async": "^2.6.1",
-    "bencode": "^2.0.0",
+    "async": "^3.2.4",
+    "bencode": "^2.0.3",
     "cbq": "0.0.1",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.21",
     "lru": "^3.1.0",
     "request": "^2.88.0",
-    "uuid": "^3.0.1"
+    "uuid": "^9.0.0"
   },
   "main": "index.js",
   "devDependencies": {
