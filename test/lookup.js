@@ -30,12 +30,12 @@ describe('announce and lookups', () => {
       if (err) throw err
       link.lookup('test', {}, (err, res) => {
         if (err) throw err
-        assert.deepStrictEqual(res, [ '127.0.0.1:10000' ])
+        assert.deepStrictEqual(res, ['127.0.0.1:10000'])
 
         // look ma, no options passed!
         link.lookup('test', (err, res) => {
           if (err) throw err
-          assert.deepStrictEqual(res, [ '127.0.0.1:10000' ])
+          assert.deepStrictEqual(res, ['127.0.0.1:10000'])
           link.stop()
           done()
         })

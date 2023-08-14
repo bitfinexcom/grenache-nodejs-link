@@ -32,7 +32,7 @@ class Link {
 
   post (url, data, opts, cb) {
     request.post(_.extend({
-      url: url,
+      url,
       json: true,
       body: data
     }, opts), (err, res, data) => {
@@ -105,7 +105,7 @@ class Link {
 
     if (fromGrape) {
       if (!err && data) {
-        let cache = this.cache[req.type]
+        const cache = this.cache[req.type]
         if (cache) {
           cache.set(req.qhash, data)
         }
@@ -123,10 +123,10 @@ class Link {
     const rid = uuidv4()
 
     const req = {
-      rid: rid,
-      type: type,
-      payload: payload,
-      opts: opts,
+      rid,
+      type,
+      payload,
+      opts,
       cb: _.isFunction(cb) ? cb : () => {},
       _ts: Date.now()
     }
@@ -288,7 +288,7 @@ class Link {
       c.clear()
     })
 
-    for (let info of this._announces.values()) {
+    for (const info of this._announces.values()) {
       info.stopped = true
       clearTimeout(info.timeout)
     }

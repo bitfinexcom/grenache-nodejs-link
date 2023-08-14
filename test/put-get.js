@@ -85,7 +85,7 @@ describe('announce and lookups', () => {
     link.putMutable(data, opts, (err, hash) => {
       if (err) throw err
 
-      link.get({ hash: hash, salt: 'foobar' }, (err, res) => {
+      link.get({ hash, salt: 'foobar' }, (err, res) => {
         if (err) throw err
 
         assert.strictEqual(res.v, 'hello world')
