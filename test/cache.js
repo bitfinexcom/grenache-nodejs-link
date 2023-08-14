@@ -33,8 +33,8 @@ describe('announce and lookups', () => {
         link.lookup('test', {}, (err, hash) => {
           if (err) throw err
           assert.deepStrictEqual(
-            link.cache['lookup'].get('lookup:"test"'),
-            [ '127.0.0.1:10000' ]
+            link.cache.lookup.get('lookup:"test"'),
+            ['127.0.0.1:10000']
           )
           link.stop()
           done()
