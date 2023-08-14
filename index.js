@@ -218,31 +218,6 @@ class Link {
     this.request('put', opts, {}, cb)
   }
 
-  putMutable (data, opts, cb) {
-    if (!data || !opts || !cb) throw new Error('ERR_MISSING_ARGS')
-    if (!data.seq) return cb(new Error('ERR_MISSING_SEQ'))
-
-    const { publicKey, secretKey } = opts.keys
-    if (!publicKey || !secretKey) return cb(new Error('ERR_MISSING_KEY'))
-
-    data.k = publicKey.toString('hex')
-
-    const toEncode = { seq: data.seq, v: data.v }
-
-    if (data.salt) toEncode.salt = data.salt
-
-    const encoded = bencode
-      .encode(toEncode)
-      .slice(1, -1)
-      .toString()
-
-    data.sig = ed
-      .sign(encoded, publicKey, secretKey)
-      .toString('hex')
-
-    this.put(data, cb)
-  }
-
   get (hash, cb) {
     this.request('get', hash, {}, cb)
   }
