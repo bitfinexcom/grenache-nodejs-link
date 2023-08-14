@@ -3,7 +3,7 @@
 const _ = require('lodash')
 const async = require('async')
 const ed = require('ed25519-supercop')
-const uuid = require('uuid')
+const { v4: uuidv4 } = require('uuid')
 const LRU = require('lru')
 const request = require('request')
 const CbQ = require('cbq')
@@ -120,7 +120,7 @@ class Link {
   }
 
   newRequest (type, payload, opts, cb) {
-    const rid = uuid.v4()
+    const rid = uuidv4()
 
     const req = {
       rid: rid,
