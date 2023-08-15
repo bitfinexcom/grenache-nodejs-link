@@ -1,6 +1,6 @@
 {
   "name": "grenache-nodejs-link",
-  "version": "0.7.13",
+  "version": "1.0.0",
   "description": "Granache Node.js Link",
   "author": "prdn <paolo@bitfinex.com> (https://bitfinex.com/)",
   "keywords": [
@@ -11,7 +11,6 @@
   ],
   "dependencies": {
     "async": "^3.2.4",
-    "bencode": "^2.0.3",
     "cbq": "0.0.1",
     "lodash": "^4.17.21",
     "lru": "^3.1.0",
@@ -21,13 +20,14 @@
   "main": "index.js",
   "devDependencies": {
     "bfx-svc-test-helper": "git+https://github.com/bitfinexcom/bfx-svc-test-helper.git",
-    "mocha": "^5.2.0",
-    "standard": "^12.0.1"
+    "mocha": "^10.2.0",
+    "standard": "^17.1.0"
   },
   "scripts": {
     "test": "npm run lint && npm run unit",
     "unit": "mocha",
-    "lint": "standard"
+    "lint": "standard",
+    "lint:fix": "standard --fix"
   },
   "license": "Apache-2.0",
   "repository": {

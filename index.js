@@ -6,7 +6,6 @@ const { v4: uuidv4 } = require('uuid')
 const LRU = require('lru')
 const request = require('request')
 const CbQ = require('cbq')
-const bencode = require('bencode')
 
 class Link {
   constructor (conf) {
@@ -31,7 +30,7 @@ class Link {
 
   post (url, data, opts, cb) {
     request.post(_.extend({
-      url: url,
+      url,
       json: true,
       body: data
     }, opts), (err, res, data) => {
@@ -104,7 +103,7 @@ class Link {
 
     if (fromGrape) {
       if (!err && data) {
-        let cache = this.cache[req.type]
+        const cache = this.cache[req.type]
         if (cache) {
           cache.set(req.qhash, data)
         }
@@ -122,10 +121,10 @@ class Link {
     const rid = uuidv4()
 
     const req = {
-      rid: rid,
-      type: type,
-      payload: payload,
-      opts: opts,
+      rid,
+      type,
+      payload,
+      opts,
       cb: _.isFunction(cb) ? cb : () => {},
       _ts: Date.now()
     }
@@ -218,31 +217,6 @@ class Link {
     this.request('put', opts, {}, cb)
   }
 
-  putMutable (data, opts, cb) {
-    if (!data || !opts || !cb) throw new Error('ERR_MISSING_ARGS')
-    if (!data.seq) return cb(new Error('ERR_MISSING_SEQ'))
-
-    const { publicKey, secretKey } = opts.keys
-    if (!publicKey || !secretKey) return cb(new Error('ERR_MISSING_KEY'))
-
-    data.k = publicKey.toString('hex')
-
-    const toEncode = { seq: data.seq, v: data.v }
-
-    if (data.salt) toEncode.salt = data.salt
-
-    const encoded = bencode
-      .encode(toEncode)
-      .slice(1, -1)
-      .toString()
-
-    data.sig = ed
-      .sign(encoded, publicKey, secretKey)
-      .toString('hex')
-
-    this.put(data, cb)
-  }
-
   get (hash, cb) {
     this.request('get', hash, {}, cb)
   }
@@ -287,7 +261,7 @@ class Link {
       c.clear()
     })
 
-    for (let info of this._announces.values()) {
+    for (const info of this._announces.values()) {
       info.stopped = true
       clearTimeout(info.timeout)
     }
