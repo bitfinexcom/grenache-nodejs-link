@@ -4,7 +4,7 @@ const _ = require('lodash')
 const async = require('async')
 const { v4: uuidv4 } = require('uuid')
 const LRU = require('lru')
-const request = require('request')
+const fetch = require('node-fetch')
 const CbQ = require('cbq')
 
 class Link {
@@ -28,20 +28,25 @@ class Link {
     this._announces = new Map()
   }
 
-  post (url, data, opts, cb) {
-    request.post(_.extend({
-      url,
-      json: true,
-      body: data
-    }, opts), (err, res, data) => {
-      if (res && !/^2..$/.test(res.statusCode)) {
-        const err = new Error(data)
-        err.code = res.statusCode
-        return cb(err)
+  async post (url, data, opts, cb) {
+    try {
+      const fetchOpts = _.extend(
+        { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) },
+        opts
+      )
+      const response = await fetch(url, fetchOpts)
+      if (response.ok) {
+        const resJson = await response.json()
+        return cb(null, resJson)
       }
 
-      cb(err, res, data)
-    })
+      const errorMsg = await response.text().catch(() => response.statusText)
+      const err = new Error(errorMsg)
+      err.code = response.status
+      return cb(err)
+    } catch (e) {
+      return cb(e)
+    }
   }
 
   getRequestHash (type, payload) {
@@ -89,7 +94,7 @@ class Link {
       {
         timeout: opts.timeout
       },
-      (err, rep, msg) => {
+      (err, msg) => {
         this.handleReply(req.rid, err, msg, true)
       }
     )
