@@ -12,7 +12,6 @@
   "dependencies": {
     "async": "3.2.6",
     "cbq": "0.0.1",
-    "lodash": "4.17.21",
     "lru": "3.1.0",
     "node-fetch": "2.7.0",
     "uuid": "11.1.0"

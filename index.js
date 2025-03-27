@@ -1,6 +1,5 @@
 'use strict'
 
-const _ = require('lodash')
 const async = require('async')
 const { v4: uuidv4 } = require('uuid')
 const LRU = require('lru')
@@ -14,10 +13,9 @@ class Link {
       monitorTimeout: 2000,
       requestTimeout: 2500,
       lruMaxSizeLookup: 2500,
-      lruMaxAgeLookup: 10000
+      lruMaxAgeLookup: 10000,
+      ...conf
     }
-
-    _.extend(this.conf, conf)
   }
 
   init () {
@@ -70,9 +68,7 @@ class Link {
   }
 
   _request (type, payload, _opts, cb) {
-    const opts = _.defaults(_opts, {
-      timeout: this.conf.requestTimeout
-    })
+    const opts = { timeout: this.conf.requestTimeout, ..._opts }
 
     const cache = this.cache[type]
 
@@ -140,7 +136,7 @@ class Link {
       type,
       payload,
       opts,
-      cb: _.isFunction(cb) ? cb : () => {},
+      cb: typeof cb === 'function' ? cb : () => {},
       _ts: Date.now()
     }
 
@@ -164,9 +160,7 @@ class Link {
   lookup (key, _opts = {}, cb) {
     if (typeof _opts === 'function') return this.lookup(key, {}, _opts)
 
-    const opts = _.defaults({}, _opts, {
-      retry: 3
-    })
+    const opts = { retry: 3, ..._opts }
 
     this.request('lookup', key, opts, (err, res) => {
       if (err) {
@@ -174,7 +168,7 @@ class Link {
         return
       }
 
-      if (!_.isArray(res) || !res.length) {
+      if (!Array.isArray(res) || !res.length) {
         return cb(new Error('ERR_GRAPE_LOOKUP_EMPTY'))
       }
 
@@ -219,9 +213,7 @@ class Link {
       cb = () => {}
     }
 
-    const opts = _.defaults({}, _opts, {
-      retry: 3
-    })
+    const opts = { retry: 3, ..._opts }
 
     this.request('announce', [key, port], opts, cb)
   }
@@ -255,8 +247,8 @@ class Link {
 
     this._monitorItv = setInterval(this.monitor.bind(this), this.conf.monitorTimeout)
 
-    _.each(['lookup'], fld => {
-      const cfld = _.upperFirst(fld)
+    for (const fld of ['lookup']) {
+      const cfld = fld.charAt(0).toUpperCase() + fld.substring(1)
 
       const opts = {
         max: this.conf[`lruMaxSize${cfld}`],
@@ -264,7 +256,7 @@ class Link {
       }
 
       this.cache[fld] = new LRU(opts)
-    })
+    }
 
     return this
   }
@@ -272,9 +264,9 @@ class Link {
   stop () {
     clearInterval(this._monitorItv)
 
-    _.each(this.cache, c => {
-      c.clear()
-    })
+    for (const key in this.cache) {
+      this.cache[key].clear()
+    }
 
     for (const info of this._announces.values()) {
       info.stopped = true
