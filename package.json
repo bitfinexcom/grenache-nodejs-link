@@ -14,8 +14,11 @@
     "cbq": "0.0.1",
     "lodash": "4.17.21",
     "lru": "3.1.0",
-    "request": "2.88.0",
+    "node-fetch": "2.7.0",
     "uuid": "11.1.0"
+  },
+  "engine": {
+    "node": ">=16.0"
   },
   "main": "index.js",
   "devDependencies": {
