@@ -45,7 +45,7 @@ class Link {
         // noop
       }
 
-      if (!/^2..$/.test(resp.status)) {
+      if (!resp.ok) {
         const err = new Error(respBody)
         err.code = resp.status
         return cb(err)
