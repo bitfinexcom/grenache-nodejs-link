@@ -21,7 +21,7 @@
   },
   "main": "index.js",
   "devDependencies": {
-    "bfx-svc-test-helper": "git+https://github.com/bitfinexcom/bfx-svc-test-helper.git",
+    "grenache-grape": "git+https://github.com/bitfinexcom/grenache-grape.git",
     "mocha": "11.1.0",
     "standard": "17.1.2"
   },
