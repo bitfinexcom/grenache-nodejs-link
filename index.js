@@ -26,7 +26,7 @@ class Link {
     this._announces = new Map()
   }
 
-  async post (url, data, opts, cb) {
+  async _post (url, data, opts, cb) {
     try {
       const resp = await fetch(url, {
         ...opts,
@@ -94,7 +94,7 @@ class Link {
       return
     }
 
-    this.post(
+    this._post(
       `${this.conf.grape}/${type}`,
       { rid: req.rid, data: req.payload },
       {
