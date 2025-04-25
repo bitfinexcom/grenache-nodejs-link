@@ -264,8 +264,8 @@ class Link {
   stop () {
     clearInterval(this._monitorItv)
 
-    for (const key in this.cache) {
-      this.cache[key].clear()
+    for (const entry of Object.values(this.cache)) {
+      entry.clear()
     }
 
     for (const info of this._announces.values()) {
