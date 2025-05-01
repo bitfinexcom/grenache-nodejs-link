@@ -247,16 +247,10 @@ class Link {
 
     this._monitorItv = setInterval(this.monitor.bind(this), this.conf.monitorTimeout)
 
-    for (const fld of ['lookup']) {
-      const cfld = fld.charAt(0).toUpperCase() + fld.substring(1)
-
-      const opts = {
-        max: this.conf[`lruMaxSize${cfld}`],
-        maxAge: this.conf[`lruMaxAge${cfld}`]
-      }
-
-      this.cache[fld] = new LRU(opts)
-    }
+    this.cache.lookup = new LRU({
+      max: this.conf.lruMaxSizeLookup,
+      maxAge: this.conf.lruMaxAgeLookup
+    })
 
     return this
   }
