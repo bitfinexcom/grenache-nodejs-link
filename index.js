@@ -1,10 +1,9 @@
 'use strict'
 
-const _ = require('lodash')
 const async = require('async')
 const { v4: uuidv4 } = require('uuid')
 const LRU = require('lru')
-const request = require('request')
+const fetch = require('node-fetch')
 const CbQ = require('cbq')
 
 class Link {
@@ -14,10 +13,9 @@ class Link {
       monitorTimeout: 2000,
       requestTimeout: 2500,
       lruMaxSizeLookup: 2500,
-      lruMaxAgeLookup: 10000
+      lruMaxAgeLookup: 10000,
+      ...conf
     }
-
-    _.extend(this.conf, conf)
   }
 
   init () {
@@ -28,20 +26,35 @@ class Link {
     this._announces = new Map()
   }
 
-  post (url, data, opts, cb) {
-    request.post(_.extend({
-      url,
-      json: true,
-      body: data
-    }, opts), (err, res, data) => {
-      if (res && !/^2..$/.test(res.statusCode)) {
-        const err = new Error(data)
-        err.code = res.statusCode
+  async _post (url, data, opts, cb) {
+    try {
+      const resp = await fetch(url, {
+        ...opts,
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: {
+          ...opts.headers,
+          'content-type': 'application/json'
+        }
+      })
+
+      let respBody = await resp.text()
+      try {
+        respBody = JSON.parse(respBody)
+      } catch (err) {
+        // noop
+      }
+
+      if (!resp.ok) {
+        const err = new Error(respBody)
+        err.code = resp.status
         return cb(err)
       }
 
-      cb(err, res, data)
-    })
+      return cb(null, respBody)
+    } catch (err) {
+      return cb(err)
+    }
   }
 
   getRequestHash (type, payload) {
@@ -55,9 +68,7 @@ class Link {
   }
 
   _request (type, payload, _opts, cb) {
-    const opts = _.defaults(_opts, {
-      timeout: this.conf.requestTimeout
-    })
+    const opts = { timeout: this.conf.requestTimeout, ..._opts }
 
     const cache = this.cache[type]
 
@@ -83,13 +94,13 @@ class Link {
       return
     }
 
-    this.post(
+    this._post(
       `${this.conf.grape}/${type}`,
       { rid: req.rid, data: req.payload },
       {
         timeout: opts.timeout
       },
-      (err, rep, msg) => {
+      (err, msg) => {
         this.handleReply(req.rid, err, msg, true)
       }
     )
@@ -125,7 +136,7 @@ class Link {
       type,
       payload,
       opts,
-      cb: _.isFunction(cb) ? cb : () => {},
+      cb: typeof cb === 'function' ? cb : () => {},
       _ts: Date.now()
     }
 
@@ -149,9 +160,7 @@ class Link {
   lookup (key, _opts = {}, cb) {
     if (typeof _opts === 'function') return this.lookup(key, {}, _opts)
 
-    const opts = _.defaults({}, _opts, {
-      retry: 3
-    })
+    const opts = { retry: 3, ..._opts }
 
     this.request('lookup', key, opts, (err, res) => {
       if (err) {
@@ -159,7 +168,7 @@ class Link {
         return
       }
 
-      if (!_.isArray(res) || !res.length) {
+      if (!Array.isArray(res) || !res.length) {
         return cb(new Error('ERR_GRAPE_LOOKUP_EMPTY'))
       }
 
@@ -204,9 +213,7 @@ class Link {
       cb = () => {}
     }
 
-    const opts = _.defaults({}, _opts, {
-      retry: 3
-    })
+    const opts = { retry: 3, ..._opts }
 
     this.request('announce', [key, port], opts, cb)
   }
@@ -240,15 +247,9 @@ class Link {
 
     this._monitorItv = setInterval(this.monitor.bind(this), this.conf.monitorTimeout)
 
-    _.each(['lookup'], fld => {
-      const cfld = _.upperFirst(fld)
-
-      const opts = {
-        max: this.conf[`lruMaxSize${cfld}`],
-        maxAge: this.conf[`lruMaxAge${cfld}`]
-      }
-
-      this.cache[fld] = new LRU(opts)
+    this.cache.lookup = new LRU({
+      max: this.conf.lruMaxSizeLookup,
+      maxAge: this.conf.lruMaxAgeLookup
     })
 
     return this
@@ -257,9 +258,9 @@ class Link {
   stop () {
     clearInterval(this._monitorItv)
 
-    _.each(this.cache, c => {
-      c.clear()
-    })
+    for (const entry of Object.values(this.cache)) {
+      entry.clear()
+    }
 
     for (const info of this._announces.values()) {
       info.stopped = true
