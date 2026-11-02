@@ -1,42 +1,30 @@
-/* eslint-env mocha */
-
 'use strict'
 
-const assert = require('assert')
+const test = require('brittle')
 
 const Link = require('../')
 const { startGrapes, stopGrapes } = require('./helper')
 
-describe('announce and lookups', () => {
-  let grapes
-  before(async function () {
-    this.timeout(20000)
+test('stores and receives values', { timeout: 20000 }, async (t) => {
+  const grapes = await startGrapes()
+  t.teardown(() => stopGrapes(grapes))
 
-    grapes = await startGrapes()
+  const link = new Link({
+    grape: 'http://127.0.0.1:30001'
   })
+  link.start()
+  t.teardown(() => link.stop())
 
-  after(async function () {
-    this.timeout(5000)
-    await stopGrapes(grapes)
-  })
-
-  it('stores and receives values', (done) => {
-    const link = new Link({
-      grape: 'http://127.0.0.1:30001'
-    })
-    link.start()
-
+  await new Promise((resolve, reject) => {
     link.put({ v: 'hello world' }, (err, hash) => {
-      if (err) throw err
+      if (err) return reject(err)
 
       link.get(hash, (err, res) => {
-        if (err) throw err
+        if (err) return reject(err)
 
-        assert.strictEqual(res.v, 'hello world')
-
-        link.stop()
-        done()
+        t.is(res.v, 'hello world')
+        resolve()
       })
     })
-  }).timeout(7000)
+  })
 })
