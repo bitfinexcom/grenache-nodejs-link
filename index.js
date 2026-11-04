@@ -1,7 +1,7 @@
 'use strict'
 
 const async = require('async')
-const { v4: uuidv4 } = require('uuid')
+const { randomUUID } = require('crypto')
 const LRU = require('lru')
 const fetch = require('node-fetch')
 const CbQ = require('cbq')
@@ -129,7 +129,7 @@ class Link {
   }
 
   newRequest (type, payload, opts, cb) {
-    const rid = uuidv4()
+    const rid = randomUUID()
 
     const req = {
       rid,

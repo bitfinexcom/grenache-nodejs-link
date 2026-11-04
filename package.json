@@ -1,7 +1,7 @@
 {
   "name": "grenache-nodejs-link",
-  "version": "1.0.2",
-  "description": "Granache Node.js Link",
+  "version": "2.0.0",
+  "description": "Grenache Node.js Link",
   "author": "prdn <paolo@bitfinex.com> (https://bitfinex.com/)",
   "keywords": [
     "grenache",
@@ -13,23 +13,22 @@
     "async": "3.2.6",
     "cbq": "0.0.1",
     "lru": "3.1.0",
-    "node-fetch": "2.7.0",
-    "uuid": "11.1.0"
+    "node-fetch": "2.7.0"
   },
-  "engine": {
-    "node": ">=16.0"
+  "engines": {
+    "node": ">=22.0"
   },
   "main": "index.js",
   "devDependencies": {
-    "grenache-grape": "1.0.0",
-    "mocha": "11.1.0",
-    "standard": "17.1.2"
+    "@bitfinex/lint-js": "^1.1.0",
+    "brittle": "^4.5.0",
+    "grenache-grape": "^2.0.0"
   },
   "scripts": {
     "test": "npm run lint && npm run unit",
-    "unit": "mocha",
-    "lint": "standard",
-    "lint:fix": "standard --fix"
+    "unit": "brittle-node test/*.js",
+    "lint": "bfx-lint-js",
+    "lint:fix": "bfx-lint-js --fix"
   },
   "license": "Apache-2.0",
   "repository": {
