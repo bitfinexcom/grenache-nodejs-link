@@ -1,6 +1,6 @@
 {
   "name": "grenache-nodejs-link",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Grenache Node.js Link",
   "author": "prdn <paolo@bitfinex.com> (https://bitfinex.com/)",
   "keywords": [
@@ -22,7 +22,7 @@
   "devDependencies": {
     "@bitfinex/lint-js": "^1.1.0",
     "brittle": "^4.5.0",
-    "grenache-grape": "^2.0.0"
+    "grenache-grape": "^2.0.1"
   },
   "scripts": {
     "test": "npm run lint && npm run unit",
